@@ -159,10 +159,10 @@ def main():
         st.header("Automated Data Cleaning")
         
         st.sidebar.subheader("2. Cleaning Options")
-        remove_dup = st.sidebar.checkbox("Remove exact duplicate rows", value=True)
-        trim_ws = st.sidebar.checkbox("Trim whitespace from text", value=True)
-        num_fill = st.sidebar.selectbox("Fill missing numeric values:", ['median', 'mean', 'None'])
-        cat_fill = st.sidebar.selectbox("Fill missing categorical values:", ['mode', 'Unknown', 'None'])
+        remove_dup = st.sidebar.checkbox("Remove exact duplicate rows", value=True, help="Removes rows where every column matches exactly.")
+        trim_ws = st.sidebar.checkbox("Trim whitespace from text", value=True, help="Removes extra spaces at the beginning and end of text values.")
+        num_fill = st.sidebar.selectbox("Fill missing numeric values:", ['median', 'mean', 'None'], help="Method to fill empty cells in number columns.")
+        cat_fill = st.sidebar.selectbox("Fill missing categorical values:", ['mode', 'Unknown', 'None'], help="Method to fill empty cells in text/category columns.")
         
         if st.button("Run Automated Cleaning"):
             with st.spinner("Cleaning data..."):
