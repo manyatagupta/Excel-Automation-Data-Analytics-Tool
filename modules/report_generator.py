@@ -4,6 +4,7 @@ from reportlab.lib.pagesizes import letter
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.lib import colors
+from datetime import datetime
 
 def generate_excel_report(cleaned_df, quality_summary, stats_df, pivot_df, insights, file_name="Report.xlsx"):
     """
@@ -77,6 +78,10 @@ def generate_pdf_report(file_name, original_rows, original_cols, cleaned_df, act
     
     # 1. Title
     elements.append(Paragraph("Excel Automation & Data Analytics Report", title_style))
+    
+    # Add generated timestamp
+    current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    elements.append(Paragraph(f"<i>Generated on: {current_time}</i>", normal_style))
     elements.append(Spacer(1, 12))
     
     # 2. File Overview
