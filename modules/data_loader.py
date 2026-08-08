@@ -14,7 +14,13 @@ def load_data(uploaded_file):
         file_ext = file_name.split('.')[-1].lower()
         
         if file_ext == 'csv':
-            df = pd.read_csv(uploaded_file)
+            # Attempt to read CSV robustly
+            try:
+                df = pd.read_csv(uploaded_file, encoding='utf-8', on_bad_lines='skip')
+            except UnicodeDecodeError:
+                # Fallback to a common alternative encoding if UTF-8 fails
+                uploaded_file.seek(0)
+                df = pd.read_csv(uploaded_file, encoding='latin1', on_bad_lines='skip')
         elif file_ext in ['xls', 'xlsx']:
             df = pd.read_excel(uploaded_file)
         else:
