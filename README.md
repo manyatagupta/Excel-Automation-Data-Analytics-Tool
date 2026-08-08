@@ -1,80 +1,99 @@
-# Excel Automation & Data Analytics Tool
+# 📊 Excel Automation & Data Analytics Tool
 
-## Project Overview
-This is a complete, production-quality web application built with Python and Streamlit. The tool allows users to upload an Excel (.xlsx/.xls) or CSV file, and automatically clean, analyze, visualize, and generate reports from the uploaded dataset. It is designed to be simple, clean, professional, and beginner-friendly.
+![Python](https://img.shields.io/badge/Python-3.11%2B-blue?style=for-the-badge&logo=python&logoColor=white)
+![Streamlit](https://img.shields.io/badge/Streamlit-1.36.0-FF4B4B?style=for-the-badge&logo=streamlit&logoColor=white)
+![Pandas](https://img.shields.io/badge/Pandas-2.2.2-150458?style=for-the-badge&logo=pandas&logoColor=white)
+![Plotly](https://img.shields.io/badge/Plotly-5.22-3F4F75?style=for-the-badge&logo=plotly&logoColor=white)
+![Status](https://img.shields.io/badge/Status-Active-brightgreen?style=for-the-badge)
 
-## Features
-- **Upload Dataset:** Supports `.csv`, `.xlsx`, and `.xls` files.
-- **Data Quality Check:** Automatically analyzes data quality (missing values, duplicates, column types).
-- **Automated Data Cleaning:** Handles missing values, removes duplicates, trims whitespace, and converts data types.
-- **Key Statistics:** Provides summary statistics for numeric and categorical columns.
-- **Visualizations:** Automatically generates Matplotlib and Plotly charts based on data types.
-- **Pivot-Style Analysis:** Allows users to create pivot table summaries.
-- **Automatic Insights:** Generates rule-based insights dynamically.
-- **Report Generation:** Export cleaned data to Excel/CSV and generate a professional PDF report.
+A complete, production-quality web application designed to empower users to easily upload, clean, analyze, visualize, and generate reports from raw Excel or CSV datasets without writing a single line of code.
 
-## Tech Stack
-- Python 3.11+
-- Streamlit
-- Pandas & NumPy
-- Matplotlib & Plotly
-- OpenPyXL
-- ReportLab
+🚀 **Live Application:** [**https://smart-excel-tools.streamlit.app/**](https://smart-excel-tools.streamlit.app/)
 
-## Project Structure
-```text
-excel-automation-tool/
-├── app.py                      # Main Streamlit application
-├── requirements.txt            # Python dependencies
-├── README.md                   # Project documentation
-├── .gitignore                  # Git ignore rules
-├── generate_sample_data.py     # Script to generate sample data
-├── modules/                    # Core logic modules
-│   ├── __init__.py
-│   ├── data_loader.py          # Handles file upload and loading
-│   ├── data_cleaner.py         # Handles data cleaning operations
-│   ├── analyzer.py             # Statistical and pivot analysis
-│   ├── visualizer.py           # Chart generation
-│   ├── report_generator.py     # PDF and Excel report creation
-│   └── utils.py                # Helper functions
-└── sample_data/
-    └── sample_sales_data.xlsx  # Synthetic dataset for testing
+---
+
+## ✨ Features
+
+- 📁 **Seamless Uploads:** Drag and drop support for `.csv`, `.xls`, and `.xlsx` files.
+- 🧹 **Automated Data Cleaning:** 
+  - One-click removal of duplicate rows.
+  - Intelligent filling of missing numeric values (Mean/Median) and categorical values (Mode).
+  - Trims unnecessary whitespace from text data.
+- 📈 **Dynamic Visualizations:** Generates fully interactive Plotly charts (Histograms, Bar Charts, Time Series, Heatmaps) tailored automatically to your data types.
+- 📊 **Pivot Table Analysis:** User-friendly pivot table generator for custom data aggregations (Sum, Mean, Min, Max, Count).
+- 💡 **Automated Insights:** Extracts rule-based smart insights and statistical summaries instantly.
+- 📑 **Export & Reporting:** Download the cleaned dataset in CSV format, or generate a **multi-sheet Excel Report** and a **Professional PDF Summary** (powered by ReportLab).
+- 🌙 **Modern UI:** Features a sleek dark mode with glassmorphism metric cards, animated backgrounds, and a highly responsive design.
+
+---
+
+## 🏗️ Architecture & Workflow
+
+```mermaid
+graph TD
+    A[User] -->|Uploads CSV/Excel| B(Data Loader Module)
+    B --> C{Data Quality Check}
+    C -->|Identifies duplicates, missing vals| D[Data Cleaner Module]
+    D -->|User triggers cleaning| E[Cleaned Dataset]
+    E --> F(Analyzer Module)
+    E --> G(Visualizer Module)
+    E --> H(Report Generator)
+    F -->|Key Stats, Pivot, Insights| I[Dashboard UI]
+    G -->|Interactive Plotly Charts| I
+    H -->|Generates PDF / Excel| J[Downloadable Reports]
+    I --> J
 ```
 
-## Installation
+---
 
-1. Clone or download this repository.
-2. Ensure you have Python 3.11+ installed.
-3. Create a virtual environment (optional but recommended):
+## 🛠️ Project Structure
+
+```text
+excel-automation-tool/
+├── app.py                      # Main Streamlit application with custom CSS
+├── requirements.txt            # Python dependencies
+├── README.md                   # Project documentation
+├── generate_sample_data.py     # Script to generate synthetic test data
+├── modules/                    # Core logic separated into distinct modules
+│   ├── __init__.py
+│   ├── data_loader.py          # Handles safe file uploads
+│   ├── data_cleaner.py         # Handles deduplication and imputation
+│   ├── analyzer.py             # Statistical summaries & insights
+│   ├── visualizer.py           # Plotly chart generation
+│   ├── report_generator.py     # PDF (ReportLab) & Excel (OpenPyXL) building
+│   └── utils.py                # UI Helpers
+└── sample_data/
+    └── sample_sales_data.xlsx  # Ready-to-use sample file
+```
+
+---
+
+## 💻 Local Installation & Setup
+
+1. **Clone the repository:**
    ```bash
-   python -m venv venv
-   source venv/bin/activate  # On Windows use: venv\Scripts\activate
+   git clone https://github.com/manyatagupta/Excel-Automation-Data-Analytics-Tool.git
+   cd Excel-Automation-Data-Analytics-Tool
    ```
-4. Install dependencies:
+
+2. **Install the dependencies:**
    ```bash
    pip install -r requirements.txt
    ```
 
-## Run Instructions
+3. **Run the Streamlit application:**
+   ```bash
+   streamlit run app.py
+   ```
 
-Run the application using Streamlit:
-```bash
-streamlit run app.py
-```
+4. **Open in Browser:**
+   The application will be running locally at `http://localhost:8501`.
 
-## Example Workflow
-1. Run the application.
-2. Upload the `sample_data/sample_sales_data.xlsx` file (generate it first using `python generate_sample_data.py` if it doesn't exist).
-3. Review the Data Quality Summary.
-4. Go to the "Automated Cleaning" tab and click "Clean Data".
-5. Explore the "Key Statistics" and "Visualizations" tabs.
-6. Create a pivot summary in the "Pivot Analysis" tab.
-7. Go to the "Download Reports" tab to export the cleaned data and PDF report.
+---
 
-## Future Improvements
-- Support for larger datasets via Dask or chunking.
-- More advanced data imputation methods.
-- Customizable report templates.
+## 🚀 Deployment
 
-## Author
-Manyata Gupta
+This application is officially deployed on **Streamlit Community Cloud**. 
+You can visit the app and test it using the sample data provided in the repository!
+
+🔗 **[Try it out here!](https://smart-excel-tools.streamlit.app/)**
