@@ -77,4 +77,4 @@ streamlit run app.py
 - Customizable report templates.
 
 ## Author
-[Your Name]
+Manyata Gupta
