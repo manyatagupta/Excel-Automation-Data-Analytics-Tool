@@ -79,3 +79,41 @@ def plot_top_bottom(df, cat_col, num_col, top_n=10):
                         title=f"Bottom {top_n} {cat_col} by {num_col}",
                         template="plotly_white")
     st.plotly_chart(fig_bottom, use_container_width=True)
+
+def plot_scatter(df, x_col, y_col, color_col=None):
+    """
+    Plots a 2D scatter plot using Plotly.
+    """
+    fig = px.scatter(df, x=x_col, y=y_col, color=color_col,
+                     title=f"Scatter Plot of {y_col} vs {x_col}",
+                     template="plotly_dark",
+                     opacity=0.7)
+    st.plotly_chart(fig, use_container_width=True)
+
+def plot_3d_scatter(df, x_col, y_col, z_col, color_col=None):
+    """
+    Plots a 3D scatter plot using Plotly.
+    """
+    fig = px.scatter_3d(df, x=x_col, y=y_col, z=z_col, color=color_col,
+                        title=f"3D Scatter Plot of {x_col}, {y_col}, {z_col}",
+                        template="plotly_dark",
+                        opacity=0.7)
+    fig.update_traces(marker=dict(size=5))
+    fig.update_layout(margin=dict(l=0, r=0, b=0, t=40))
+    st.plotly_chart(fig, use_container_width=True)
+
+def plot_map(df, location_col, num_col):
+    """
+    Plots a geographical map (choropleth).
+    Assumes location_col contains country names or standard ISO codes.
+    """
+    # Group by location and sum the numeric values
+    grouped = df.groupby(location_col)[num_col].sum().reset_index()
+    
+    fig = px.choropleth(grouped, locations=location_col, locationmode='country names',
+                        color=num_col,
+                        title=f"Global Map of {num_col} by {location_col}",
+                        template="plotly_dark",
+                        color_continuous_scale="Viridis")
+    fig.update_layout(geo=dict(showframe=False, showcoastlines=True, projection_type='equirectangular'))
+    st.plotly_chart(fig, use_container_width=True)

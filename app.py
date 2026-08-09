@@ -9,7 +9,7 @@ st.set_page_config(page_title="Excel Automation & Data Analytics Tool", layout="
 from modules.data_loader import load_data, get_file_info
 from modules.data_cleaner import get_data_quality_summary, clean_data
 from modules.analyzer import get_key_statistics, generate_pivot_table, generate_insights
-from modules.visualizer import plot_numeric_distribution, plot_categorical_distribution, plot_time_series, plot_correlation_heatmap, plot_top_bottom
+from modules.visualizer import plot_numeric_distribution, plot_categorical_distribution, plot_time_series, plot_correlation_heatmap, plot_top_bottom, plot_scatter, plot_3d_scatter, plot_map
 from modules.report_generator import generate_pdf_report, generate_excel_report
 from modules.utils import create_excel_download_link
 
@@ -19,7 +19,7 @@ def main():
     <style>
     /* Main background and fonts */
     .stApp {
-        background: linear-gradient(-45deg, #050a1f, #0d1b42, #1a365d, #050a1f);
+        background: linear-gradient(-45deg, #020617, #0f172a, #1e1b4b, #020617);
         background-size: 400% 400%;
         animation: gradientBG 15s ease infinite;
         font-family: 'Inter', sans-serif;
@@ -33,48 +33,76 @@ def main():
     
     /* Header styling */
     h1 {
-        background: -webkit-linear-gradient(45deg, #4da6ff, #00f2fe);
+        background: -webkit-linear-gradient(45deg, #38bdf8, #818cf8, #c084fc);
         -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         font-weight: 800;
         margin-bottom: 0px !important;
+        animation: textShine 3s linear infinite;
+        background-size: 200% auto;
+    }
+
+    @keyframes textShine {
+        to {
+            background-position: 200% center;
+        }
     }
     
-    /* Metric Cards */
+    /* Metric Cards Glassmorphism */
     div[data-testid="metric-container"] {
-        background-color: rgba(15, 23, 42, 0.7);
-        backdrop-filter: blur(10px);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        border-radius: 0.5rem;
+        background: rgba(15, 23, 42, 0.4);
+        backdrop-filter: blur(16px);
+        -webkit-backdrop-filter: blur(16px);
+        border: 1px solid rgba(255, 255, 255, 0.05);
+        border-radius: 1rem;
         padding: 1.5rem;
-        box-shadow: 0 0.15rem 1.75rem 0 rgba(0, 0, 0, 0.3);
-        transition: transform 0.3s ease-in-out, box-shadow 0.3s ease;
+        box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.4s ease;
     }
     div[data-testid="metric-container"]:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 0.3rem 2rem 0 rgba(77, 166, 255, 0.2);
+        transform: translateY(-8px) scale(1.02);
+        box-shadow: 0 10px 40px 0 rgba(56, 189, 248, 0.2);
+        border: 1px solid rgba(56, 189, 248, 0.3);
     }
     
     /* Dataframe rounding */
     div[data-testid="stDataFrame"] > div {
-        border-radius: 0.5rem;
+        border-radius: 1rem;
         border: 1px solid rgba(255, 255, 255, 0.05);
-        box-shadow: 0 0.15rem 1.75rem 0 rgba(0, 0, 0, 0.2);
+        background: rgba(15, 23, 42, 0.4);
+        backdrop-filter: blur(12px);
+        box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.2);
     }
     
     /* Button styling */
     .stButton>button {
-        background: linear-gradient(90deg, #4e73df 0%, #2e59d9 100%);
+        background: linear-gradient(90deg, #3b82f6 0%, #8b5cf6 100%);
         color: white;
-        border-radius: 0.35rem;
+        border-radius: 0.5rem;
         font-weight: 600;
         border: none;
-        transition: all 0.3s;
+        padding: 0.5rem 1rem;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
     }
     .stButton>button:hover {
-        transform: scale(1.02);
-        box-shadow: 0 0.15rem 1.5rem 0 rgba(78, 115, 223, 0.4);
+        transform: translateY(-2px) scale(1.05);
+        box-shadow: 0 8px 25px 0 rgba(139, 92, 246, 0.4);
         color: white;
+    }
+    
+    /* Tabs styling */
+    .stTabs [data-baseweb="tab-list"] {
+        gap: 8px;
+        background-color: rgba(15, 23, 42, 0.5);
+        padding: 0.5rem;
+        border-radius: 1rem;
+        backdrop-filter: blur(10px);
+    }
+    .stTabs [data-baseweb="tab"] {
+        border-radius: 0.5rem !important;
+        padding: 0.5rem 1rem !important;
+        transition: background-color 0.3s ease !important;
     }
     </style>
     """, unsafe_allow_html=True)
@@ -217,36 +245,68 @@ def main():
         if not numeric_cols and not cat_cols:
             st.warning("Not enough data to generate visualizations.")
         else:
-            # Numeric Distribution
-            if numeric_cols:
-                st.subheader("Numeric Distributions")
+            viz_type = st.selectbox("Select Visualization Type:", [
+                "Numeric Distribution", "Categorical Distribution", "Time Series Analysis",
+                "Top/Bottom Analysis", "Correlation Heatmap", "Scatter Plot (2D)",
+                "Scatter Plot (3D)", "Geographical Map"
+            ])
+            
+            st.markdown("---")
+            
+            if viz_type == "Numeric Distribution" and numeric_cols:
                 sel_num_col = st.selectbox("Select numeric column:", numeric_cols)
                 plot_numeric_distribution(df_clean, sel_num_col)
                 
-            # Categorical Distribution
-            if cat_cols:
-                st.subheader("Categorical Distributions")
+            elif viz_type == "Categorical Distribution" and cat_cols:
                 sel_cat_col = st.selectbox("Select categorical column:", cat_cols)
                 plot_categorical_distribution(df_clean, sel_cat_col)
                 
-            # Time Series
-            if date_cols and numeric_cols:
-                st.subheader("Time Series Analysis")
+            elif viz_type == "Time Series Analysis" and date_cols and numeric_cols:
                 sel_date_col = st.selectbox("Select date column:", date_cols)
                 sel_ts_num_col = st.selectbox("Select numeric column to track:", numeric_cols, key='ts_num')
                 plot_time_series(df_clean, sel_date_col, sel_ts_num_col)
                 
-            # Top/Bottom Analysis
-            if cat_cols and numeric_cols:
-                st.subheader("Top/Bottom Analysis")
+            elif viz_type == "Top/Bottom Analysis" and cat_cols and numeric_cols:
                 sel_tb_cat = st.selectbox("Select category:", cat_cols, key='tb_cat')
                 sel_tb_num = st.selectbox("Select metric:", numeric_cols, key='tb_num')
                 plot_top_bottom(df_clean, sel_tb_cat, sel_tb_num)
                 
-            # Correlation Heatmap
-            if len(numeric_cols) >= 2:
-                st.subheader("Correlation Heatmap")
+            elif viz_type == "Correlation Heatmap" and len(numeric_cols) >= 2:
                 plot_correlation_heatmap(df_clean)
+                
+            elif viz_type == "Scatter Plot (2D)" and len(numeric_cols) >= 2:
+                col1, col2, col3 = st.columns(3)
+                with col1:
+                    x_col = st.selectbox("X-Axis (Numeric):", numeric_cols, index=0)
+                with col2:
+                    y_col = st.selectbox("Y-Axis (Numeric):", numeric_cols, index=1)
+                with col3:
+                    color_col = st.selectbox("Color By (Optional Category):", ['None'] + cat_cols)
+                plot_scatter(df_clean, x_col, y_col, None if color_col == 'None' else color_col)
+                
+            elif viz_type == "Scatter Plot (3D)" and len(numeric_cols) >= 3:
+                col1, col2, col3, col4 = st.columns(4)
+                with col1:
+                    x_col = st.selectbox("X-Axis (Numeric):", numeric_cols, index=0)
+                with col2:
+                    y_col = st.selectbox("Y-Axis (Numeric):", numeric_cols, index=1)
+                with col3:
+                    z_col = st.selectbox("Z-Axis (Numeric):", numeric_cols, index=2)
+                with col4:
+                    color_col = st.selectbox("Color By (Optional):", ['None'] + cat_cols)
+                plot_3d_scatter(df_clean, x_col, y_col, z_col, None if color_col == 'None' else color_col)
+                
+            elif viz_type == "Geographical Map" and cat_cols and numeric_cols:
+                st.info("💡 Ensure the location column contains valid Country Names or standard codes for the map to render correctly.")
+                col1, col2 = st.columns(2)
+                with col1:
+                    loc_col = st.selectbox("Location Column (Category):", cat_cols)
+                with col2:
+                    num_col = st.selectbox("Value Column (Numeric):", numeric_cols)
+                plot_map(df_clean, loc_col, num_col)
+                
+            else:
+                st.info(f"The selected visualization '{viz_type}' requires specific column types that are not present in your dataset.")
 
     # --- TAB 5: Pivot Analysis ---
     with tab5:
