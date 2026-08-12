@@ -212,6 +212,8 @@ def main():
                 st.session_state['cleaned_df'] = cleaned
                 st.session_state['cleaning_actions'] = actions
                 st.success("Data cleaned successfully!")
+                st.toast("Data cleaned successfully! 🧹", icon="✅")
+                st.balloons()
                 
         if st.session_state['cleaning_actions']:
             st.subheader("Cleaning Summary")
@@ -387,6 +389,8 @@ def main():
                     excel_data = generate_excel_report(
                         df_clean, quality_summary, stats, pivot_df, insights
                     )
+                    st.success("Excel Report ready!")
+                    st.balloons()
                     st.download_button(
                         label="Download Excel Report",
                         data=excel_data,
@@ -409,6 +413,8 @@ def main():
                             insights,
                             pivot_df
                         )
+                        st.success("PDF Report ready!")
+                        st.balloons()
                         st.download_button(
                             label="Download PDF Report",
                             data=pdf_data,
