@@ -192,8 +192,9 @@ def main():
         c3.metric("Numeric Columns", type_counts['Numeric Columns'])
         c4.metric("Categorical Columns", type_counts['Categorical Columns'])
         
-        st.subheader("Column Details")
-        st.dataframe(col_summary_df, use_container_width=True)
+        st.markdown("<br>", unsafe_allow_html=True)
+        with st.expander("🔍 View Detailed Column Statistics"):
+            st.dataframe(col_summary_df, use_container_width=True)
 
     # --- TAB 2: Automated Cleaning ---
     with tab2:
