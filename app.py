@@ -220,16 +220,29 @@ def main():
             orig_sum, _, _ = get_data_quality_summary(df_orig)
             clean_sum, _, _ = get_data_quality_summary(st.session_state['cleaned_df'])
             
-            comp_df = pd.DataFrame({
-                "Metric": ["Rows", "Columns", "Duplicate Rows", "Missing Cells"],
-                "Before Cleaning": orig_sum['Value'].values,
-                "After Cleaning": clean_sum['Value'].values
-            })
-            st.table(comp_df)
+            st.markdown("##### 📉 Before vs After")
+            m1, m2, m3, m4 = st.columns(4)
             
-            st.subheader("Actions Performed:")
-            for act in st.session_state['cleaning_actions']:
-                st.write(act)
+            orig_rows = int(orig_sum.loc[orig_sum['Metric'] == 'Rows', 'Value'].values[0])
+            clean_rows = int(clean_sum.loc[clean_sum['Metric'] == 'Rows', 'Value'].values[0])
+            m1.metric("Rows", clean_rows, delta=clean_rows - orig_rows, delta_color="normal")
+            
+            orig_cols = int(orig_sum.loc[orig_sum['Metric'] == 'Columns', 'Value'].values[0])
+            clean_cols = int(clean_sum.loc[clean_sum['Metric'] == 'Columns', 'Value'].values[0])
+            m2.metric("Columns", clean_cols, delta=clean_cols - orig_cols, delta_color="normal")
+            
+            orig_dups = int(orig_sum.loc[orig_sum['Metric'] == 'Duplicate Rows', 'Value'].values[0])
+            clean_dups = int(clean_sum.loc[clean_sum['Metric'] == 'Duplicate Rows', 'Value'].values[0])
+            m3.metric("Duplicate Rows", clean_dups, delta=clean_dups - orig_dups, delta_color="inverse")
+            
+            orig_miss = int(orig_sum.loc[orig_sum['Metric'] == 'Missing Cells', 'Value'].values[0])
+            clean_miss = int(clean_sum.loc[clean_sum['Metric'] == 'Missing Cells', 'Value'].values[0])
+            m4.metric("Missing Cells", clean_miss, delta=clean_miss - orig_miss, delta_color="inverse")
+            
+            st.markdown("<br>", unsafe_allow_html=True)
+            with st.expander("🛠️ View Detailed Cleaning Actions Log"):
+                for act in st.session_state['cleaning_actions']:
+                    st.write(act)
                 
             st.subheader("Cleaned Data Preview")
             st.dataframe(st.session_state['cleaned_df'].head(10), use_container_width=True)
