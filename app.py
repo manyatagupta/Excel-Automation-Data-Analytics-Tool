@@ -132,10 +132,11 @@ def main():
         st.session_state['cleaning_actions'] = []
 
     # Sidebar Navigation & Settings
-    st.sidebar.header("Navigation & Settings")
+    st.sidebar.header("⚙️ Navigation & Settings")
+    st.sidebar.divider()
     
     # 1. Upload Dataset
-    st.sidebar.subheader("1. Upload Dataset")
+    st.sidebar.subheader("📂 1. Upload Dataset")
     uploaded_file = st.sidebar.file_uploader("Upload .csv, .xls, .xlsx", type=['csv', 'xls', 'xlsx'])
     
     if uploaded_file is not None:
