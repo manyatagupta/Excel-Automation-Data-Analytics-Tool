@@ -102,7 +102,18 @@ def main():
     .stTabs [data-baseweb="tab"] {
         border-radius: 0.5rem !important;
         padding: 0.5rem 1rem !important;
-        transition: background-color 0.3s ease !important;
+        transition: all 0.3s ease !important;
+    }
+    .stTabs [data-baseweb="tab"]:hover {
+        background-color: rgba(56, 189, 248, 0.2) !important;
+        transform: translateY(-2px);
+    }
+    
+    /* Sidebar Styling */
+    section[data-testid="stSidebar"] {
+        background-color: rgba(15, 23, 42, 0.8) !important;
+        backdrop-filter: blur(20px);
+        border-right: 1px solid rgba(255, 255, 255, 0.1);
     }
     </style>
     """, unsafe_allow_html=True)
