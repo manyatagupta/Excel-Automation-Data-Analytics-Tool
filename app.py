@@ -149,6 +149,7 @@ def main():
                 st.session_state['file_name'] = uploaded_file.name
                 st.session_state['cleaning_actions'] = []
                 st.sidebar.success(f"Loaded: {uploaded_file.name}")
+                st.toast(f"Successfully loaded {uploaded_file.name}!", icon="🎉")
     else:
         st.session_state['original_df'] = None
         st.session_state['cleaned_df'] = None
